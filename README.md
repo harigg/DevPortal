@@ -82,6 +82,7 @@ DevPortal/
 │   │   ├── app/                  # App Router pages
 │   │   ├── components/           # Reusable React components
 │   │   ├── lib/                  # Utility functions and configurations
+│   │   ├── hooks/                # Custom React hooks
 │   │   └── types/                # TypeScript type definitions
 │   ├── public/                   # Static assets
 │   └── package.json
@@ -93,14 +94,56 @@ DevPortal/
 │   │   ├── analytics/            # Analytics service
 │   │   └── testing/              # Testing service
 │   └── package.json
-├── infrastructure/                # AWS CDK/CloudFormation templates
-│   ├── cdk/                      # CDK stack definitions
+├── infrastructure/                # Infrastructure as Code
+│   ├── cdk/                      # AWS CDK stack definitions
+│   │   ├── lib/                  # CDK constructs and stacks
+│   │   ├── bin/                  # CDK app entry points
+│   │   └── test/                 # CDK infrastructure tests
 │   ├── templates/                # CloudFormation templates
 │   └── scripts/                  # Deployment scripts
-├── tests/                        # Test files
+├── workflows/                     # Temporal workflow definitions
+│   ├── auth/                     # Authentication workflows
+│   ├── api/                      # API management workflows
+│   ├── docs/                     # Documentation workflows
+│   ├── analytics/                # Analytics workflows
+│   └── testing/                  # Testing workflows
+├── activities/                    # Temporal activity functions
+│   ├── auth/                     # Authentication activities
+│   ├── api/                      # API management activities
+│   ├── docs/                     # Documentation activities
+│   ├── analytics/                # Analytics activities
+│   └── testing/                  # Testing activities
+├── specs/                        # OpenAPI specifications as code
+│   ├── auth/                     # Authentication API specs
+│   ├── api/                      # API management specs
+│   ├── docs/                     # Documentation API specs
+│   ├── analytics/                # Analytics API specs
+│   └── testing/                  # Testing API specs
+├── tests/                        # Test files (TDD approach)
 │   ├── unit/                     # Unit tests
+│   │   ├── frontend/             # Frontend unit tests
+│   │   ├── backend/              # Backend unit tests
+│   │   ├── workflows/            # Workflow unit tests
+│   │   └── activities/           # Activity unit tests
 │   ├── integration/              # Integration tests
-│   └── e2e/                      # End-to-end tests
+│   │   ├── api/                  # API integration tests
+│   │   ├── workflows/            # Workflow integration tests
+│   │   └── infrastructure/       # Infrastructure integration tests
+│   ├── e2e/                      # End-to-end tests
+│   │   ├── cypress/              # Cypress E2E tests
+│   │   └── playwright/           # Playwright E2E tests
+│   └── fixtures/                  # Test data and fixtures
+├── scripts/                      # Build and deployment scripts
+│   ├── build/                    # Build scripts
+│   ├── deploy/                   # Deployment scripts
+│   └── test/                     # Test execution scripts
+├── .github/                      # GitHub Actions workflows
+│   └── workflows/                # CI/CD pipelines
+├── .cursorrules                  # Cursor AI development rules
+├── package.json                  # Root package.json for workspace
+├── tsconfig.json                 # TypeScript configuration
+├── jest.config.js               # Jest testing configuration
+├── cypress.config.js            # Cypress E2E configuration
 └── README.md                     # This file
 ```
 
@@ -110,7 +153,7 @@ DevPortal/
 - **Framework**: Next.js 14 with App Router
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS + shadcn/ui
-- **State Management**: Zustand + React Query
+- **State Management**: Temporal Workflows (via API calls)
 - **Testing**: Jest + Cypress
 
 ### Backend
@@ -119,6 +162,7 @@ DevPortal/
 - **API**: AWS API Gateway
 - **Database**: Amazon DynamoDB
 - **Storage**: Amazon S3
+- **Workflow Orchestration**: Temporal Cloud
 
 ### Infrastructure
 - **Hosting**: AWS Amplify
@@ -126,6 +170,55 @@ DevPortal/
 - **Authentication**: AWS Cognito
 - **Monitoring**: AWS CloudWatch + X-Ray
 - **CI/CD**: AWS CodePipeline
+- **Workflow Engine**: Temporal Cloud
+
+## 🧪 Test-Driven Development (TDD)
+
+### TDD Approach
+This project follows a strict Test-Driven Development methodology:
+
+1. **Red**: Write a failing test first
+2. **Green**: Write minimal code to make the test pass
+3. **Refactor**: Improve the code while keeping tests green
+
+### Test Structure
+```
+tests/
+├── unit/                     # Fast, isolated tests
+│   ├── frontend/            # React component tests
+│   ├── backend/             # Lambda function tests
+│   ├── workflows/           # Temporal workflow tests
+│   └── activities/          # Temporal activity tests
+├── integration/             # Service integration tests
+│   ├── api/                 # API endpoint tests
+│   ├── workflows/           # Workflow integration tests
+│   └── infrastructure/      # Infrastructure tests
+├── e2e/                     # End-to-end user journey tests
+│   ├── cypress/            # Cypress E2E tests
+│   └── playwright/         # Playwright E2E tests
+└── fixtures/               # Test data and mock objects
+```
+
+### Running Tests
+```bash
+# Run all tests
+npm test
+
+# Run unit tests only
+npm run test:unit
+
+# Run integration tests
+npm run test:integration
+
+# Run E2E tests
+npm run test:e2e
+
+# Run tests with coverage
+npm run test:coverage
+
+# Run tests in watch mode
+npm run test:watch
+```
 
 ## 🚀 Deployment
 
@@ -153,6 +246,46 @@ npm run deploy:app
 npm run deploy:prod
 ```
 
+## 🏗️ Infrastructure as Code (IaC)
+
+### AWS CDK Stacks
+All infrastructure is defined as code using AWS CDK:
+
+```bash
+# Deploy infrastructure
+npm run deploy:infrastructure
+
+# Deploy specific stack
+npm run deploy:stack -- --stack auth-stack
+
+# Destroy infrastructure
+npm run destroy:infrastructure
+
+# Synthesize CloudFormation templates
+npm run synth
+```
+
+### Infrastructure Components
+- **Authentication Stack**: Cognito, IAM roles, API Gateway
+- **Database Stack**: DynamoDB tables, indexes, and policies
+- **Compute Stack**: Lambda functions, API Gateway, CloudFront
+- **Monitoring Stack**: CloudWatch, X-Ray, alarms
+- **Security Stack**: WAF, Secrets Manager, KMS
+
+### OpenAPI Specifications as Code
+All API specifications are maintained as code in the `specs/` directory:
+
+```bash
+# Validate OpenAPI specs
+npm run validate:specs
+
+# Generate API documentation
+npm run generate:docs
+
+# Test API contracts
+npm run test:contracts
+```
+
 ## 📊 Features
 
 ### Phase 1: Core Features ✅
@@ -176,6 +309,24 @@ npm run deploy:prod
 - [ ] Custom SDK generation
 - [ ] Webhook management
 
+## 🔄 Temporal Workflow Integration
+
+### Why Temporal?
+Temporal provides robust workflow orchestration for complex business processes:
+
+- **Reliability**: Automatic retries, timeouts, and error handling
+- **Observability**: Built-in workflow monitoring and debugging UI
+- **Scalability**: Handle long-running processes across multiple Lambda invocations
+- **State Persistence**: Maintain workflow state across service restarts
+- **Compensation**: Automatic rollback for failed operations
+
+### Workflow Use Cases
+1. **User Onboarding**: Multi-step registration and setup processes
+2. **API Registration**: Validation, documentation generation, and team notification
+3. **Analytics Processing**: Complex data aggregation and report generation
+4. **Testing Orchestration**: Multi-step API testing with retry logic
+5. **Documentation Generation**: Automated documentation updates and publishing
+
 ## 💰 Cost Optimization
 
 ### Serverless Benefits
@@ -184,13 +335,14 @@ npm run deploy:prod
 - **Managed Services**: Reduced operational overhead
 
 ### Estimated Monthly Costs (100 developers)
-- **Total**: $140-280/month
+- **Total**: $190-380/month
 - **Lambda**: $50-100
 - **DynamoDB**: $25-50
 - **S3**: $10-20
 - **CloudFront**: $15-30
 - **API Gateway**: $35-70
 - **Cognito**: $5-10
+- **Temporal Cloud**: $50-100
 
 ## 🔒 Security
 

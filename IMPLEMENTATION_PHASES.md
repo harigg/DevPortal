@@ -1,5 +1,63 @@
 # Implementation Phases - Developer Portal
 
+## Test-Driven Development (TDD) Methodology
+
+This project follows a strict Test-Driven Development approach where tests are written before implementation:
+
+### TDD Cycle
+1. **Red**: Write a failing test that defines the desired functionality
+2. **Green**: Write minimal code to make the test pass
+3. **Refactor**: Improve the code while keeping tests green
+
+### Testing Strategy
+- **Unit Tests**: Test individual functions, components, and workflows in isolation
+- **Integration Tests**: Test interactions between services and APIs
+- **End-to-End Tests**: Test complete user journeys and workflows
+- **Contract Tests**: Test API specifications and OpenAPI contracts
+- **Infrastructure Tests**: Test CDK stacks and infrastructure components
+
+### Test Coverage Requirements
+- **Unit Tests**: 90%+ code coverage
+- **Integration Tests**: All API endpoints and workflows
+- **E2E Tests**: All critical user journeys
+- **Contract Tests**: All OpenAPI specifications
+
+## Phase 0: Test-Driven Development Foundation (Week 0)
+
+### Week 0: TDD Setup & Test Infrastructure
+**Objectives**: Establish Test-Driven Development foundation and write tests before implementation
+
+**Tasks**:
+- [ ] Set up Jest testing framework with TypeScript support
+- [ ] Configure Cypress for E2E testing
+- [ ] Set up Playwright for cross-browser testing
+- [ ] Create test utilities and mocking infrastructure
+- [ ] Set up MSW (Mock Service Worker) for API mocking
+- [ ] Configure test coverage reporting
+- [ ] Create test data fixtures and factories
+- [ ] Set up CI/CD pipeline with test execution
+- [ ] Write failing tests for core authentication functionality
+- [ ] Write failing tests for API management features
+- [ ] Write failing tests for documentation system
+- [ ] Write failing tests for analytics functionality
+- [ ] Write failing tests for testing interface
+
+**Deliverables**:
+- Complete test infrastructure setup
+- Failing test suite for all core features
+- Test utilities and mocking framework
+- CI/CD pipeline with automated testing
+- Test coverage reporting configured
+
+**Technical Stack**:
+- Jest for unit testing
+- Cypress for E2E testing
+- Playwright for cross-browser testing
+- MSW for API mocking
+- GitHub Actions for CI/CD
+
+**Estimated Cost**: $0 (development tools only)
+
 ## Phase 1: Foundation & Core Infrastructure (Weeks 1-4)
 
 ### Week 1: AWS Environment Setup
@@ -12,14 +70,28 @@
 - [ ] Set up AWS Secrets Manager for sensitive data
 - [ ] Configure AWS CloudTrail for audit logging
 - [ ] Set up AWS Config for compliance monitoring
+- [ ] Set up Temporal Cloud account and workspace
+- [ ] Configure Temporal Cloud authentication and permissions
+- [ ] Set up AWS CDK project structure
+- [ ] Create CDK stacks for infrastructure components
+- [ ] Implement Infrastructure as Code for all AWS resources
+- [ ] Set up CDK pipelines for automated deployments
 
 **Deliverables**:
 - AWS environment with proper security controls
 - IAM policies and roles defined
 - Network architecture implemented
 - Cost monitoring and alerting configured
+- Temporal Cloud workspace configured
+- AWS CDK infrastructure code
+- Automated deployment pipelines
 
-**Estimated Cost**: $50-100/month (infrastructure only)
+**Technical Stack**:
+- AWS CDK v2 for Infrastructure as Code
+- GitHub Actions for CI/CD
+- Temporal Cloud for workflow orchestration
+
+**Estimated Cost**: $100-150/month (infrastructure + Temporal)
 
 ### Week 2: Authentication & User Management
 **Objectives**: Implement secure user authentication system
@@ -31,17 +103,29 @@
 - [ ] Create user registration and profile management
 - [ ] Set up role-based access control (RBAC)
 - [ ] Implement API key management system
+- [ ] Create Temporal authentication workflow
+- [ ] Implement user onboarding workflow with Temporal
+- [ ] Create OpenAPI specifications for authentication API
+- [ ] Implement API contract testing
+- [ ] Generate API documentation from OpenAPI specs
 
 **Deliverables**:
 - Working authentication system
 - User management interface
 - API key generation and management
 - Role-based permissions system
+- Temporal authentication workflows
+- User onboarding workflow implementation
+- OpenAPI specifications for auth API
+- API contract tests
+- Generated API documentation
 
 **Technical Stack**:
 - AWS Cognito
 - Lambda functions for auth logic
 - DynamoDB for user data storage
+- Temporal Cloud for workflow orchestration
+- OpenAPI 3.0 for API specifications
 
 ### Week 3: Basic Portal Structure
 **Objectives**: Create the core portal interface and navigation
@@ -53,17 +137,23 @@
 - [ ] Set up routing and page structure
 - [ ] Implement basic dashboard
 - [ ] Add user profile and settings pages
+- [ ] Write tests for all React components (TDD approach)
+- [ ] Implement components to make tests pass
+- [ ] Refactor components while keeping tests green
 
 **Deliverables**:
 - Functional portal interface
 - Responsive design system
 - Navigation and user experience foundation
 - Basic dashboard with user information
+- Complete test suite for all components
+- Test coverage reports
 
 **Technical Stack**:
 - Next.js 14 with App Router
 - Tailwind CSS + shadcn/ui
 - TypeScript for type safety
+- Jest + Testing Library for component testing
 
 ### Week 4: API Gateway & Lambda Setup
 **Objectives**: Establish backend API infrastructure
@@ -75,18 +165,30 @@
 - [ ] Set up DynamoDB tables with proper indexes
 - [ ] Configure CORS and security headers
 - [ ] Implement basic error handling and logging
+- [ ] Set up Temporal workers for Lambda functions
+- [ ] Create workflow definitions for core services
+- [ ] Implement Temporal client integration
+- [ ] Write integration tests for API endpoints (TDD approach)
+- [ ] Implement API logic to make tests pass
+- [ ] Write unit tests for Lambda functions
 
 **Deliverables**:
 - Working API Gateway with Lambda functions
 - Database schema implemented
 - Basic API endpoints functional
 - Error handling and logging in place
+- Temporal workers configured
+- Core workflow definitions implemented
+- Complete test suite for API endpoints
+- Integration tests for all services
 
 **Technical Stack**:
 - AWS API Gateway
 - AWS Lambda (Node.js 18+)
 - DynamoDB for data storage
 - CloudWatch for logging
+- Temporal Cloud for workflow orchestration
+- Jest for API testing
 
 ## Phase 2: Core Features (Weeks 5-8)
 
@@ -100,6 +202,8 @@
 - [ ] Create documentation editor with markdown support
 - [ ] Implement code example management
 - [ ] Add API versioning support
+- [ ] Create API registration workflow with Temporal
+- [ ] Implement documentation generation workflow
 
 **Deliverables**:
 - Interactive API documentation interface
@@ -107,11 +211,14 @@
 - Documentation editor with rich text support
 - Code examples in multiple languages
 - API versioning and history tracking
+- Temporal workflows for API registration
+- Automated documentation generation workflow
 
 **Technical Stack**:
 - Swagger UI for documentation rendering
 - React components for documentation management
 - S3 for storing documentation assets
+- Temporal Cloud for workflow orchestration
 
 ### Week 6: API Testing Interface
 **Objectives**: Build comprehensive API testing capabilities
@@ -123,6 +230,8 @@
 - [ ] Create test collection and environment management
 - [ ] Implement test result storage and history
 - [ ] Add error handling and debugging tools
+- [ ] Create API testing workflow with Temporal
+- [ ] Implement test orchestration and retry logic
 
 **Deliverables**:
 - Interactive API testing interface
@@ -130,11 +239,14 @@
 - Test collection management
 - Response validation and error handling
 - Test history and result storage
+- Temporal workflows for test orchestration
+- Automated test retry and failure handling
 
 **Technical Stack**:
 - React components for testing interface
 - Axios for HTTP requests
 - DynamoDB for test result storage
+- Temporal Cloud for test workflow orchestration
 
 ### Week 7: User Management & Analytics
 **Objectives**: Implement user management and basic analytics
@@ -146,6 +258,8 @@
 - [ ] Create dashboard with key metrics
 - [ ] Implement notification system
 - [ ] Add user feedback and rating system
+- [ ] Create analytics processing workflow with Temporal
+- [ ] Implement data aggregation and reporting workflows
 
 **Deliverables**:
 - User administration dashboard
@@ -153,11 +267,14 @@
 - Usage tracking and metrics
 - Notification system
 - User feedback collection
+- Temporal workflows for analytics processing
+- Automated report generation workflows
 
 **Technical Stack**:
 - DynamoDB for analytics data
 - CloudWatch for metrics
 - SNS for notifications
+- Temporal Cloud for analytics workflow orchestration
 
 ### Week 8: Search & Discovery
 **Objectives**: Implement API search and discovery features
@@ -442,13 +559,15 @@
 - **Team**: $200,000 - $300,000
 - **Infrastructure**: $2,000 - $4,000
 - **Tools and Services**: $5,000 - $10,000
-- **Total Development**: $207,000 - $314,000
+- **Temporal Cloud**: $2,000 - $4,000
+- **Total Development**: $209,000 - $318,000
 
 ### Ongoing Operational Costs (Monthly)
 - **Infrastructure**: $200 - $500
+- **Temporal Cloud**: $100 - $200
 - **Monitoring**: $100 - $200
 - **Support**: $2,000 - $5,000
-- **Total Monthly**: $2,300 - $5,700
+- **Total Monthly**: $2,400 - $5,900
 
 ## Post-Launch Activities
 
