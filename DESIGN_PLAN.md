@@ -1,7 +1,7 @@
 # Developer Portal Design Plan
 
 ## Overview
-A comprehensive developer portal for internal APIs built on AWS serverless architecture to minimize costs while providing a robust, scalable solution for API documentation, testing, and management.
+A comprehensive developer portal for internal APIs built on AWS serverless architecture to minimize costs while providing a robust, scalable solution for API documentation, testing, and management. The project follows Infrastructure as Code (IaC) principles and Test-Driven Development (TDD) methodology.
 
 ## Core Requirements
 - **API Documentation**: Interactive documentation with live testing capabilities
@@ -10,20 +10,23 @@ A comprehensive developer portal for internal APIs built on AWS serverless archi
 - **Analytics & Monitoring**: Usage tracking and performance metrics
 - **Cost Optimization**: Serverless-first approach to minimize operational costs
 - **Scalability**: Auto-scaling to handle varying developer usage patterns
+- **Infrastructure as Code**: All infrastructure defined and managed as code
+- **Test-Driven Development**: Tests written before implementation
 
 ## Technology Stack
 
 ### Frontend
 - **Framework**: Next.js 14 with App Router
 - **UI Library**: Tailwind CSS + shadcn/ui components
-- **State Management**: Zustand
-- **API Client**: Axios with React Query for caching
+- **State Management**: Temporal Workflows (via API calls)
+- **API Client**: Axios with Temporal workflow orchestration
 - **Documentation**: OpenAPI 3.0 specification with Swagger UI
 
 ### Backend
 - **Runtime**: Node.js 18+ with TypeScript
 - **API Gateway**: AWS API Gateway (REST)
 - **Compute**: AWS Lambda functions
+- **Workflow Orchestration**: Temporal Cloud for state management and complex workflows
 - **Authentication**: AWS Cognito
 - **Database**: Amazon DynamoDB (NoSQL) + Amazon RDS Aurora Serverless (SQL when needed)
 
@@ -35,12 +38,123 @@ A comprehensive developer portal for internal APIs built on AWS serverless archi
 - **CI/CD**: AWS CodePipeline + CodeBuild
 - **Secrets**: AWS Secrets Manager
 - **Configuration**: AWS Systems Manager Parameter Store
+- **Infrastructure as Code**: AWS CDK v2
+- **Testing**: Jest, Cypress, Playwright
 
 ### Additional Services
 - **Email**: Amazon SES
 - **Notifications**: Amazon SNS
 - **Queue**: Amazon SQS (for async processing)
 - **Search**: Amazon OpenSearch (for API search functionality)
+- **Workflow Engine**: Temporal Cloud (for complex business process orchestration)
+
+## Infrastructure as Code (IaC) Strategy
+
+### AWS CDK Implementation
+All infrastructure is defined as code using AWS CDK v2:
+
+```typescript
+// infrastructure/cdk/lib/dev-portal-stack.ts
+export class DevPortalStack extends Stack {
+  constructor(scope: Construct, id: string, props?: StackProps) {
+    super(scope, id, props);
+
+    // Create all AWS resources programmatically
+    const userPool = new UserPool(this, 'UserPool', {
+      userPoolName: 'dev-portal-users',
+      // ... configuration
+    });
+
+    const api = new RestApi(this, 'Api', {
+      restApiName: 'dev-portal-api',
+      // ... configuration
+    });
+
+    // Lambda functions
+    const authFunction = new Function(this, 'AuthFunction', {
+      runtime: Runtime.NODEJS_18_X,
+      handler: 'index.handler',
+      code: Code.fromAsset('backend/src/auth'),
+    });
+  }
+}
+```
+
+### Infrastructure Testing
+- **CDK Tests**: Validate infrastructure definitions
+- **Integration Tests**: Test deployed infrastructure
+- **Security Tests**: Validate security configurations
+- **Cost Tests**: Monitor infrastructure costs
+
+### Benefits of IaC
+- **Version Control**: All infrastructure changes tracked in Git
+- **Reproducibility**: Consistent environments across stages
+- **Automation**: Automated deployments and rollbacks
+- **Documentation**: Infrastructure code serves as documentation
+- **Testing**: Infrastructure can be tested before deployment
+
+## Test-Driven Development (TDD) Strategy
+
+### TDD Methodology
+This project follows strict TDD principles:
+
+1. **Red Phase**: Write a failing test that defines desired functionality
+2. **Green Phase**: Write minimal code to make the test pass
+3. **Refactor Phase**: Improve code while keeping tests green
+
+### Testing Pyramid
+```
+                    ┌─────────────────┐
+                    │   E2E Tests     │ ← User journeys
+                    │   (Few, Slow)   │
+                    └─────────────────┘
+                 ┌─────────────────────┐
+                 │ Integration Tests   │ ← API & Workflow tests
+                 │   (Some, Medium)    │
+                 └─────────────────────┘
+              ┌───────────────────────────┐
+              │     Unit Tests           │ ← Components & Functions
+              │   (Many, Fast)           │
+              └───────────────────────────┘
+```
+
+### Test Categories
+- **Unit Tests**: Individual functions, components, workflows
+- **Integration Tests**: API endpoints, service interactions
+- **End-to-End Tests**: Complete user journeys
+- **Contract Tests**: OpenAPI specification validation
+- **Infrastructure Tests**: CDK stack validation
+
+### Test Coverage Requirements
+- **Unit Tests**: 90%+ code coverage
+- **Integration Tests**: All API endpoints
+- **E2E Tests**: All critical user journeys
+- **Contract Tests**: All OpenAPI specifications
+
+## Temporal Workflow Integration
+
+### Why Temporal for State Management
+Temporal provides a robust, scalable solution for managing complex business processes in the developer portal:
+
+#### Benefits
+- **Reliability**: Automatic retries, timeouts, and error handling
+- **Observability**: Built-in workflow monitoring and debugging UI
+- **Scalability**: Handle long-running processes across multiple Lambda invocations
+- **State Persistence**: Maintain workflow state across service restarts
+- **Compensation**: Automatic rollback for failed operations
+
+#### Use Cases in Developer Portal
+1. **User Onboarding Workflow**: Multi-step user registration and setup
+2. **API Registration Process**: Validation, documentation generation, and team notification
+3. **Analytics Processing**: Complex data aggregation and report generation
+4. **Testing Orchestration**: Multi-step API testing with retry logic
+5. **Documentation Generation**: Automated documentation updates and publishing
+
+#### Workflow Patterns
+- **Saga Pattern**: For distributed transactions across services
+- **Event Sourcing**: For audit trails and state reconstruction
+- **Compensation**: For handling partial failures in complex operations
+- **Human-in-the-Loop**: For approval workflows and manual interventions
 
 ## Key Features
 
@@ -106,7 +220,8 @@ A comprehensive developer portal for internal APIs built on AWS serverless archi
 - **CloudFront**: ~$15-30 (data transfer)
 - **API Gateway**: ~$35-70 (requests)
 - **Cognito**: ~$5-10 (user management)
-- **Total Estimated**: ~$140-280/month
+- **Temporal Cloud**: ~$50-100 (workflow execution and storage)
+- **Total Estimated**: ~$190-380/month
 
 ### Cost Monitoring
 - AWS Cost Explorer for budget tracking
